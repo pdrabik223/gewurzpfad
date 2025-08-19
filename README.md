@@ -33,3 +33,8 @@ To compile this project using CMake:
 	```powershell
 	.\Debug\gewurzpfad.exe
 	```
+
+
+## Upgrade cards
+
+Every player get's upgrade 2 at the beggining of the gaame, and there's also singular upgrade 3 card
