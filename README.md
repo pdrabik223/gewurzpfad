@@ -37,4 +37,4 @@ To compile this project using CMake:
 
 ## Upgrade cards
 
-Every player get's upgrade 2 at the beggining of the gaame, and there's also singular upgrade 3 card
+Every player get's upgrade 2 at the beginning of the agame, and there's also singular upgrade 3 card

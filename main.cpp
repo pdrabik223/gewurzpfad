@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include <sstream>
+#include <array>
 
 using namespace std;
 // format text using
@@ -87,6 +89,11 @@ ft(string text, const char *foreground_color = FGC::White, const char *backgroun
     resp.append("\033[0m");
     return resp;
 };
+string
+ft(int value, const char *foreground_color = FGC::White, const char *background_color = BGC::Black)
+{
+    return ft(to_string(value), foreground_color, background_color);
+};
 
 enum Spice
 {
@@ -104,8 +111,65 @@ enum Coins
 
 };
 
+class SpiceArray
+{
+public:
+    unsigned spices[4] = {0, 0, 0, 0};
+
+    SpiceArray() {};
+
+    SpiceArray(unsigned spices[4])
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            this->spices[i] = spices[i];
+        }
+    };
+    unsigned &operator[](Spice index)
+    {
+        switch (index)
+        {
+        case Spice::Yellow:
+            return this->spices[0];
+        case Spice::Red:
+            return this->spices[1];
+        case Spice::Green:
+            return this->spices[2];
+        case Spice::Brown:
+            return this->spices[3];
+        }
+    }
+
+    SpiceArray(SpiceArray &const copy)
+    {
+
+        this->spices[0] = copy[Spice::Yellow];
+        this->spices[1] = copy[Spice::Red];
+        this->spices[2] = copy[Spice::Green];
+        this->spices[3] = copy[Spice::Brown];
+    };
+
+    void operator=(SpiceArray &const copy)
+    {
+        this->spices[0] = copy[Spice::Yellow];
+        this->spices[1] = copy[Spice::Red];
+        this->spices[2] = copy[Spice::Green];
+        this->spices[3] = copy[Spice::Brown];
+    }
+
+    string show()
+    {
+        return ft(spices[0], FGC::Black, BGC::BrightYellow) + " " +
+               ft(spices[1], FGC::Black, BGC::BrightRed) + " " +
+               ft(spices[2], FGC::Black, BGC::BrightGreen) + " " +
+               ft(spices[3], FGC::Black, BGC::Yellow);
+    }
+};
+
 class Card
 {
+public:
+    string show();
 };
 class TradeCard : public Card
 {
@@ -124,7 +188,7 @@ public:
 class PointsCard : public Card
 {
 public:
-    PointsCard(vector<Spice> cost) {}
+    PointsCard(vector<Spice> cost, unsigned points) {}
 };
 
 class UpgradeCard : public Card
@@ -138,19 +202,36 @@ class Hand
 public:
     vector<Card> active;
     vector<Card> resting_cards;
-    vector<Spice> held_spices;
-    vector<Coins> held_coins;
+
+    SpiceArray held_spices;
+
+    unsigned held_coins = 0;
 
     unsigned currentPoints()
     {
         return 12;
     };
 
-    Hand(vector<Card> active,
-         vector<Spice> held_spices)
+    Hand(vector<Card> active, SpiceArray held_spices)
     {
         this->active = active;
+
         this->held_spices = held_spices;
+    }
+    Hand(Hand &const other)
+    {
+        this->active = other.active;
+        this->held_coins = other.held_coins;
+        this->resting_cards = other.resting_cards;
+        this->held_spices = other.held_spices;
+    }
+    void operator=(Hand &const other)
+    {
+
+        this->active = other.active;
+        this->held_coins = other.held_coins;
+        this->resting_cards = other.resting_cards;
+        this->held_spices = other.held_spices;
     }
 };
 
@@ -165,31 +246,35 @@ public:
     // game begin constructor
     GameState(unsigned no_players)
     {
+        unsigned first_hand[4] = {3, 0, 0, 0};
+        unsigned second_hand[4] = {4, 0, 0, 0};
+        unsigned forth_hand[4] = {4, 1, 0, 0};
+
         switch (no_players)
         {
         case 2:
-            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow})};
+            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand)};
             break;
         case 3:
-            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow})};
+            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand)};
             break;
         case 4:
             players = {
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Red}),
+                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
+                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
+                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
+                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand),
             };
             break;
         case 5:
-            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Yellow}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Red}),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow, Spice::Red})};
+            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand),
+                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand)};
             break;
         default:
             throw invalid_argument("no_players must be in range <2,5>");
@@ -202,15 +287,23 @@ public:
 
 int main()
 {
+    unsigned forth_hand[4] = {4, 1, 0, 0};
 
-    Hand hand1({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, {Spice::Yellow, Spice::Yellow, Spice::Yellow});
+    Hand hand1({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand);
+
+    printf("Player 1\n");
+    printf("Spices:\t");
+    printf(hand1.held_spices.show().c_str());
+    printf("\n");
+    printf("Points:\t");
+    printf(ft(12, FGC::BrightYellow, BGC::Black).c_str());
+    printf("Active cards:\t");
 
     // printf("hand1\n");
     // printf("\033[3;43;30m0\033[0m ");
     // printf("\033[3;43;30m1\033[0m ");
     // printf("\033[3;43;30m2\033[0m ");
     // printf("\033[3;43;30m3\033[0m ");
-    printf(ft("test", FGC::Yellow, BGC::Black).c_str());
 
     // printf("\x1B[31mTexting\033[0m\t\t");
     // printf("\x1B[32mTexting\033[0m\t\t");
