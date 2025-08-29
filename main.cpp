@@ -125,6 +125,7 @@ public:
             this->spices[i] = spices[i];
         }
     };
+
     unsigned &operator[](Spice index)
     {
         switch (index)
@@ -139,22 +140,42 @@ public:
             return this->spices[3];
         }
     }
+#pragma warning(push)
+#pragma warning(disable : 4175)
+    unsigned get(Spice index) const
+    {
+        switch (index)
+        {
+        case Spice::Yellow:
+            return this->spices[0];
+        case Spice::Red:
+            return this->spices[1];
+        case Spice::Green:
+            return this->spices[2];
+        case Spice::Brown:
+            return this->spices[3];
+        default:
+            return -1;
+        }
+    }
+#pragma warning(pop)
 
-    SpiceArray(SpiceArray &const copy)
+    SpiceArray(const SpiceArray &copy)
     {
 
-        this->spices[0] = copy[Spice::Yellow];
-        this->spices[1] = copy[Spice::Red];
-        this->spices[2] = copy[Spice::Green];
-        this->spices[3] = copy[Spice::Brown];
+        this->spices[0] = copy.get(Spice::Yellow);
+        this->spices[1] = copy.get(Spice::Red);
+        this->spices[2] = copy.get(Spice::Green);
+        this->spices[3] = copy.get(Spice::Brown);
     };
 
-    void operator=(SpiceArray &const copy)
+    const SpiceArray &operator=(const SpiceArray &copy)
     {
-        this->spices[0] = copy[Spice::Yellow];
-        this->spices[1] = copy[Spice::Red];
-        this->spices[2] = copy[Spice::Green];
-        this->spices[3] = copy[Spice::Brown];
+        this->spices[0] = copy.get(Spice::Yellow);
+        this->spices[1] = copy.get(Spice::Red);
+        this->spices[2] = copy.get(Spice::Green);
+        this->spices[3] = copy.get(Spice::Brown);
+        return *this;
     }
 
     string show()
@@ -215,23 +236,25 @@ public:
     Hand(vector<Card> active, SpiceArray held_spices)
     {
         this->active = active;
-
         this->held_spices = held_spices;
     }
-    Hand(Hand &const other)
+    Hand(const Hand &other)
     {
+        // if (other == *this)
+        //     return;
         this->active = other.active;
         this->held_coins = other.held_coins;
         this->resting_cards = other.resting_cards;
         this->held_spices = other.held_spices;
     }
-    void operator=(Hand &const other)
+    Hand &operator=(const Hand &other)
     {
 
         this->active = other.active;
         this->held_coins = other.held_coins;
         this->resting_cards = other.resting_cards;
         this->held_spices = other.held_spices;
+        return *this;
     }
 };
 
@@ -297,7 +320,7 @@ int main()
     printf("\n");
     printf("Points:\t");
     printf(ft(12, FGC::BrightYellow, BGC::Black).c_str());
-    printf("Active cards:\t");
+    printf(" Active cards:\t");
 
     // printf("hand1\n");
     // printf("\033[3;43;30m0\033[0m ");
