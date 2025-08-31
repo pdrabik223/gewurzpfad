@@ -3,4 +3,9 @@ project(gewurzpfad)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(gewurzpfad main.cpp)
+include_directories(lib)
+
+set(SOURCES lib/console_tools/console_tools.cpp
+)
+
+add_executable(gewurzpfad main.cpp ${SOURCES})

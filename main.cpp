@@ -3,316 +3,23 @@
 #include <stdexcept>
 #include <sstream>
 #include <array>
-
+#include <initializer_list>
+#include "lib/console_tools/console_tools.h"
+#include "lib/engine/spice_array.h"
+#include "lib/engine/cards/card.h"
+#include "lib/engine/cards/points_card.h"
+#include "lib/engine/cards/income_card.h"
+#include "lib/engine/cards/upgrade_card.h"
+#include "lib/engine/hand.h"
 using namespace std;
 // format text using
 
-namespace FGC
-{
 
-    const char *Black = "30";
-    const char *Red = "31";
-    const char *Green = "32";
-    const char *Yellow = "33";
-    const char *Blue = "34";
-    const char *Magenta = "35";
-    const char *Cyan = "36";
-    const char *White = "37";
-    const char *BrightBlack = "90";
-    const char *BrightRed = "91";
-    const char *BrightGreen = "92";
-    const char *BrightYellow = "93";
-    const char *BrightBlue = "94";
-    const char *BrightMagenta = "95";
-    const char *BrightCyan = "96";
-    const char *BrightWhite = "97";
-}
-namespace BGC
-{
-    const char *Black = "40";
-    const char *Red = "41";
-    const char *Green = "42";
-    const char *Yellow = "43";
-    const char *Blue = "44";
-    const char *Magenta = "45";
-    const char *Cyan = "46";
-    const char *White = "47";
-    const char *BrightBlack = "100";
-    const char *BrightRed = "101";
-    const char *BrightGreen = "102";
-    const char *BrightYellow = "103";
-    const char *BrightBlue = "104";
-    const char *BrightMagenta = "105";
-    const char *BrightCyan = "106";
-    const char *BrightWhite = "107";
-};
-namespace TEF
-{
-    const char *Default = "0"; // 1
-    const char *Bright = "0";  // 1
-    const char *ItalicBright = "3";
-    const char *BrightUnderlined = "4";
-    const char *AnimatedDimming = "5"; // 6
-    const char *ReversedBGFGColors = "7";
-    const char *NoDisplayOrBlack = "8";
-    const char *LineInTheMiddle = "9";
-
-}
-
-// Name            FG  BG
-// Black           30  40
-// Red             31  41
-// Green           32  42
-// Yellow          33  43
-// Blue            34  44
-// Magenta         35  45
-// Cyan            36  46
-// White           37  47
-// Bright Black    90  100
-// Bright Red      91  101
-// Bright Green    92  102
-// Bright Yellow   93  103
-// Bright Blue     94  104
-// Bright Magenta  95  105
-// Bright Cyan     96  106
-// Bright White    97  107
-
-string
-ft(string text, const char *foreground_color = FGC::White, const char *background_color = BGC::Black)
-{
-    string resp("\033[0;");
-    resp.append(foreground_color);
-    resp.append(";");
-    resp.append(background_color);
-    resp.append("m");
-    resp.append(text);
-    resp.append("\033[0m");
-    return resp;
-};
-string
-ft(int value, const char *foreground_color = FGC::White, const char *background_color = BGC::Black)
-{
-    return ft(to_string(value), foreground_color, background_color);
-};
-
-enum Spice
-{
-    Yellow = 0,
-    Red = 1,
-    Green = 2,
-    Brown = 3
-
-};
-
-enum Coins
-{
-    Silver = 1,
-    Gold = 3
-
-};
-
-class SpiceArray
-{
-public:
-    unsigned spices[4] = {0, 0, 0, 0};
-
-    SpiceArray() {};
-
-    SpiceArray(unsigned spices[4])
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            this->spices[i] = spices[i];
-        }
-    };
-
-    unsigned &operator[](Spice index)
-    {
-        switch (index)
-        {
-        case Spice::Yellow:
-            return this->spices[0];
-        case Spice::Red:
-            return this->spices[1];
-        case Spice::Green:
-            return this->spices[2];
-        case Spice::Brown:
-            return this->spices[3];
-        }
-    }
-#pragma warning(push)
-#pragma warning(disable : 4175)
-    unsigned get(Spice index) const
-    {
-        switch (index)
-        {
-        case Spice::Yellow:
-            return this->spices[0];
-        case Spice::Red:
-            return this->spices[1];
-        case Spice::Green:
-            return this->spices[2];
-        case Spice::Brown:
-            return this->spices[3];
-        default:
-            return -1;
-        }
-    }
-#pragma warning(pop)
-
-    SpiceArray(const SpiceArray &copy)
-    {
-
-        this->spices[0] = copy.get(Spice::Yellow);
-        this->spices[1] = copy.get(Spice::Red);
-        this->spices[2] = copy.get(Spice::Green);
-        this->spices[3] = copy.get(Spice::Brown);
-    };
-
-    const SpiceArray &operator=(const SpiceArray &copy)
-    {
-        this->spices[0] = copy.get(Spice::Yellow);
-        this->spices[1] = copy.get(Spice::Red);
-        this->spices[2] = copy.get(Spice::Green);
-        this->spices[3] = copy.get(Spice::Brown);
-        return *this;
-    }
-
-    string show()
-    {
-        return ft(spices[0], FGC::Black, BGC::BrightYellow) + " " +
-               ft(spices[1], FGC::Black, BGC::BrightRed) + " " +
-               ft(spices[2], FGC::Black, BGC::BrightGreen) + " " +
-               ft(spices[3], FGC::Black, BGC::Yellow);
-    }
-};
-
-class Card
-{
-public:
-    string show();
-};
-class TradeCard : public Card
-{
-
-    TradeCard(vector<Spice> cost, vector<Spice> result)
-    {
-    }
-};
-class IncomeCard : public Card
-{
-public:
-    vector<Spice> income;
-    IncomeCard(vector<Spice> result) : income(result) {}
-};
-
-class PointsCard : public Card
-{
-public:
-    PointsCard(vector<Spice> cost, unsigned points) {}
-};
-
-class UpgradeCard : public Card
-{
-public:
-    UpgradeCard(int upgrade_level) {}
-};
-
-class Hand
-{
-public:
-    vector<Card> active;
-    vector<Card> resting_cards;
-
-    SpiceArray held_spices;
-
-    unsigned held_coins = 0;
-
-    unsigned currentPoints()
-    {
-        return 12;
-    };
-
-    Hand(vector<Card> active, SpiceArray held_spices)
-    {
-        this->active = active;
-        this->held_spices = held_spices;
-    }
-    Hand(const Hand &other)
-    {
-        // if (other == *this)
-        //     return;
-        this->active = other.active;
-        this->held_coins = other.held_coins;
-        this->resting_cards = other.resting_cards;
-        this->held_spices = other.held_spices;
-    }
-    Hand &operator=(const Hand &other)
-    {
-
-        this->active = other.active;
-        this->held_coins = other.held_coins;
-        this->resting_cards = other.resting_cards;
-        this->held_spices = other.held_spices;
-        return *this;
-    }
-};
-
-class GameState
-{
-public:
-    vector<Hand> players;
-    vector<Card> displayed_trade_cards;
-    vector<PointsCard> displayed_points_cards;
-    unsigned round_index = 0;
-
-    // game begin constructor
-    GameState(unsigned no_players)
-    {
-        unsigned first_hand[4] = {3, 0, 0, 0};
-        unsigned second_hand[4] = {4, 0, 0, 0};
-        unsigned forth_hand[4] = {4, 1, 0, 0};
-
-        switch (no_players)
-        {
-        case 2:
-            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand)};
-            break;
-        case 3:
-            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand)};
-            break;
-        case 4:
-            players = {
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
-                Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand),
-            };
-            break;
-        case 5:
-            players = {Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, first_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, second_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand),
-                       Hand({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand)};
-            break;
-        default:
-            throw invalid_argument("no_players must be in range <2,5>");
-        }
-    }
-    void displayGameState()
-    {
-    }
-};
 
 int main()
 {
-    unsigned forth_hand[4] = {4, 1, 0, 0};
 
-    Hand hand1({UpgradeCard(2), IncomeCard({Spice::Yellow, Spice::Yellow})}, forth_hand);
+    Hand hand1({&UpgradeCard(2), &IncomeCard({2, 0, 0, 0})}, {4, 1, 0, 0});
 
     printf("Player 1\n");
     printf("Spices:\t");
@@ -320,8 +27,13 @@ int main()
     printf("\n");
     printf("Points:\t");
     printf(ft(12, FGC::BrightYellow, BGC::Black).c_str());
-    printf(" Active cards:\t");
+    printf(" Active cards:  ");
 
+    for (Card *card : hand1.active)
+    {
+        printf(card->show().c_str());
+        printf("  ");
+    }
     // printf("hand1\n");
     // printf("\033[3;43;30m0\033[0m ");
     // printf("\033[3;43;30m1\033[0m ");
