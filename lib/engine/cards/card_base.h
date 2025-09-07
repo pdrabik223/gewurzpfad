@@ -1,14 +1,14 @@
-#ifndef card_h
-#define card_h
+#ifndef base_card_h
+#define base_card_h
 #pragma once
 using namespace std;
 #include <sstream>
 
-class Card
+class CardBase
 {
 public:
+    // Card();
     virtual string show() = 0;
-
-    // virtual Card(const Card &) = 0;
+    virtual ~CardBase() =0;
 };
 #endif

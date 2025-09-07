@@ -4,13 +4,15 @@
 using namespace std;
 #include <sstream>
 #include "../spice_array.h"
-#include "card.h"
+#include "card_base.h"
 
-class UpgradeCard : public Card
+class UpgradeCard : public CardBase
 {
 public:
     unsigned upgrade_level;
     UpgradeCard(unsigned upgrade_level) : upgrade_level(upgrade_level) {}
+    
+    // ~UpgradeCard() override {}
 
     UpgradeCard(const UpgradeCard &other)
     {

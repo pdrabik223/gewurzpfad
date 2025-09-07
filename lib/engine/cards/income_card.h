@@ -4,13 +4,15 @@
 using namespace std;
 #include <sstream>
 #include "../spice_array.h"
-#include "card.h"
-class IncomeCard : public Card
+#include "card_base.h"
+class IncomeCard : public CardBase
 {
 public:
     SpiceArray income;
 
-    IncomeCard(SpiceArray income) : income(income) {}
+    IncomeCard(const SpiceArray &income) : income(income) {}
+
+    // ~IncomeCard() {};
 
     IncomeCard(const IncomeCard &other)
     {
@@ -32,10 +34,8 @@ public:
 
     string show() override
     {
-        printf(ft(income.spices.size()).c_str());
-        return "  -> " + income.show();
+        return "#  -> " + income.show();
     }
 };
-
 
 #endif

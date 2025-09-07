@@ -1,2 +1,2 @@
 cmake --build build/
-build\\Debug\gewurzpfad.exe
+build\Debug\gewurzpfad.exe

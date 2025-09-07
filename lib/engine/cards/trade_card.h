@@ -4,15 +4,17 @@
 using namespace std;
 #include <sstream>
 #include "../spice_array.h"
-#include "card.h"
+#include "card_base.h"
 
-class TradeCard : public Card
+class TradeCard : public CardBase
 {
 public:
     SpiceArray cost;
     SpiceArray result;
 
     TradeCard(SpiceArray cost, SpiceArray result) : cost(cost), result(result) {}
+    ~TradeCard() override {}
+
     TradeCard(const TradeCard &other)
     {
         if (this == &other)

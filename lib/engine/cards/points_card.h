@@ -4,15 +4,17 @@
 using namespace std;
 #include <sstream>
 #include "../spice_array.h"
-#include "card.h"
+#include "card_base.h"
 
-class PointsCard : public Card
+class PointsCard : public CardBase
 {
 public:
     unsigned points;
     SpiceArray cost;
 
     PointsCard(SpiceArray cost, unsigned points) : cost(cost), points(points) {}
+    
+    ~PointsCard() override {}
 
     string show() override
     {

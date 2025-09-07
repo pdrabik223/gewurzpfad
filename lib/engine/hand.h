@@ -11,13 +11,13 @@ using namespace std;
 
 #include "lib/console_tools/console_tools.h"
 #include "lib/engine/spice_array.h"
-#include "lib/engine/cards/card.h"
+#include "lib/engine/cards/card_base.h"
 
 class Hand
 {
 public:
-    vector<Card *> active;
-    vector<Card *> resting_cards;
+    vector<CardBase *> active;
+    vector<CardBase *> resting_cards;
 
     SpiceArray held_spices;
 
@@ -30,23 +30,31 @@ public:
 
     ~Hand()
     {
-        for (Card *card : this->active)
+        cout << "here";
+
+        for (auto i = this->active.size()-1; i >= 0; i--)
         {
-            delete card;
+            cout << i;
+            delete this->active[i];
         }
 
-        for (Card *card : this->resting_cards)
+        cout << "here2";
+        
+        for (auto i = this->resting_cards.size(); i--;)
         {
-            delete card;
+            delete this->resting_cards[i];
         }
     }
 
-    Hand(initializer_list<Card *> active, SpiceArray held_spices) : active(active), held_spices(held_spices)
-    {
-        for (Card *card : this->active)
+    Hand(initializer_list<CardBase *> active, SpiceArray held_spices) : active(active), held_spices(held_spices) {
+
+
+         for (auto i = this->active.size()-1; i >= 0; i--)
         {
-            printf(card->show().c_str());
+
+            printf(this->active[i]->show().c_str());
         }
+
     }
 
     Hand(const Hand &other)

@@ -15,12 +15,12 @@
 #include "cards/upgrade_card.h"
 #include "hand.h"
 using namespace std;
-// format text using
+
 class GameState
 {
 public:
     vector<Hand> players;
-    vector<Card> displayed_trade_cards;
+    vector<CardBase*> displayed_trade_cards;
     vector<PointsCard> displayed_points_cards;
     unsigned round_index = 0;
 

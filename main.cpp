@@ -6,20 +6,18 @@
 #include <initializer_list>
 #include "lib/console_tools/console_tools.h"
 #include "lib/engine/spice_array.h"
-#include "lib/engine/cards/card.h"
+#include "lib/engine/cards/card_base.h"
 #include "lib/engine/cards/points_card.h"
 #include "lib/engine/cards/income_card.h"
 #include "lib/engine/cards/upgrade_card.h"
 #include "lib/engine/hand.h"
 using namespace std;
-// format text using
-
-
 
 int main()
 {
-
-    Hand hand1({&UpgradeCard(2), &IncomeCard({2, 0, 0, 0})}, {4, 1, 0, 0});
+    IncomeCard ic({2, 0, 0, 0});
+    
+    Hand hand1({&UpgradeCard(2), &ic}, {4, 1, 0, 0});
 
     printf("Player 1\n");
     printf("Spices:\t");
@@ -27,43 +25,14 @@ int main()
     printf("\n");
     printf("Points:\t");
     printf(ft(12, FGC::BrightYellow, BGC::Black).c_str());
-    printf(" Active cards:  ");
+    printf(" Active cards:\n");
 
-    for (Card *card : hand1.active)
+    for (auto card : hand1.active)
     {
         printf(card->show().c_str());
-        printf("  ");
+        printf("\t");
     }
-    // printf("hand1\n");
-    // printf("\033[3;43;30m0\033[0m ");
-    // printf("\033[3;43;30m1\033[0m ");
-    // printf("\033[3;43;30m2\033[0m ");
-    // printf("\033[3;43;30m3\033[0m ");
 
-    // printf("\x1B[31mTexting\033[0m\t\t");
-    // printf("\x1B[32mTexting\033[0m\t\t");
-    // printf("\x1B[33mTexting\033[0m\t\t");
-    // printf("\x1B[34mTexting\033[0m\t\t");
-    // printf("\x1B[35mTexting\033[0m\n");
-
-    // printf("\x1B[36mTexting\033[0m\t\t");
-    // printf("\x1B[36mTexting\033[0m\t\t");
-    // printf("\x1B[36mTexting\033[0m\t\t");
-    // printf("\x1B[37mTexting\033[0m\t\t");
-    // printf("\x1B[93mTexting\033[0m\n");
-
-    // printf("\033[3;42;30mTexting\033[0m\t\t");
-    // printf("\033[3;43;30mTexting\033[0m\t\t");
-    // printf("\033[3;44;30mTexting\033[0m\t\t");
-    // printf("\033[3;104;30mTexting\033[0m\t\t");
-    // printf("\033[3;100;30mTexting\033[0m\n");
-
-    // printf("\033[3;47;35mTexting\033[0m\t\t");
-    // printf("\033[2;47;35mTexting\033[0m\t\t");
-    // printf("\033[1;47;35mTexting\033[0m\t\t");
-    // printf("\t\t");
-    // printf("\n");
-    // cout << BG::Black;
     return 0;
 }
 // #include <json/value.h>
