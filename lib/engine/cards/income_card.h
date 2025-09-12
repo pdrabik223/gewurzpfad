@@ -12,7 +12,7 @@ public:
 
     IncomeCard(const SpiceArray &income) : income(income) {}
 
-    // ~IncomeCard() {};
+    ~IncomeCard() override = default;
 
     IncomeCard(const IncomeCard &other)
     {
@@ -31,11 +31,13 @@ public:
 
         return *this;
     }
+    IncomeCard *Clone() { return new IncomeCard(*this); }
+    
+    string Show() override { return "#  -> " + income.show(); }
+    CardType GetCardType() const override { return type_; }
 
-    string show() override
-    {
-        return "#  -> " + income.show();
-    }
+private:
+    const CardType type_ = CardType::INCOME_CARD;
 };
 
 #endif

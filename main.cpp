@@ -16,7 +16,7 @@ using namespace std;
 int main()
 {
     IncomeCard ic({2, 0, 0, 0});
-    
+
     Hand hand1({&UpgradeCard(2), &ic}, {4, 1, 0, 0});
 
     printf("Player 1\n");
@@ -29,7 +29,7 @@ int main()
 
     for (auto card : hand1.active)
     {
-        printf(card->show().c_str());
+        printf(card->Show().c_str());
         printf("\t");
     }
 

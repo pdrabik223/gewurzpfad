@@ -11,8 +11,10 @@ class UpgradeCard : public CardBase
 public:
     unsigned upgrade_level;
     UpgradeCard(unsigned upgrade_level) : upgrade_level(upgrade_level) {}
-    
-    // ~UpgradeCard() override {}
+
+    ~UpgradeCard() override = default;
+
+    UpgradeCard *Clone() { return new UpgradeCard(*this); }
 
     UpgradeCard(const UpgradeCard &other)
     {
@@ -28,11 +30,16 @@ public:
 
         return *this;
     }
-    string show() override
+
+    string Show() override
     {
         return ft(upgrade_level, FGC::Black, BGC::BrightWhite) + " -> " + ft(upgrade_level, FGC::Black, BGC::BrightWhite);
     }
-};
 
+    CardType GetCardType() const override { return type_; }
+
+private:
+    const CardType type_ = CardType::UPGRADE_CARD;
+};
 
 #endif

@@ -13,13 +13,12 @@ public:
     SpiceArray cost;
 
     PointsCard(SpiceArray cost, unsigned points) : cost(cost), points(points) {}
-    
-    ~PointsCard() override {}
 
-    string show() override
-    {
-        return cost.show() + " -> " + ft(12, FGC::BrightYellow, BGC::Black).c_str();
-    }
+    ~PointsCard() override = default;
+
+    PointsCard *Clone() { return new PointsCard(*this); }
+
+    string Show() override { return cost.show() + " -> " + ft(12, FGC::BrightYellow, BGC::Black).c_str(); }
 
     PointsCard(const PointsCard &other)
     {
@@ -37,6 +36,11 @@ public:
 
         return *this;
     }
+
+    CardType GetCardType() const override { return type_; }
+
+private:
+    const CardType type_ = CardType::POINTS_CARD;
 };
 
 #endif

@@ -16,8 +16,7 @@ using namespace std;
 class Hand
 {
 public:
-    vector<CardBase *> active;
-    vector<CardBase *> resting_cards;
+    vector<CardBase *> active, resting_cards;
 
     SpiceArray held_spices;
 
@@ -30,31 +29,31 @@ public:
 
     ~Hand()
     {
-        cout << "here";
 
-        for (auto i = this->active.size()-1; i >= 0; i--)
+        for (auto i = this->active.size() - 1; i--;)
         {
-            cout << i;
             delete this->active[i];
         }
 
-        cout << "here2";
-        
         for (auto i = this->resting_cards.size(); i--;)
         {
             delete this->resting_cards[i];
         }
     }
 
-    Hand(initializer_list<CardBase *> active, SpiceArray held_spices) : active(active), held_spices(held_spices) {
+    Hand(initializer_list<CardBase *> active, SpiceArray held_spices) : held_spices(held_spices)
+    {
 
-
-         for (auto i = this->active.size()-1; i >= 0; i--)
+        for (auto card : active)
         {
-
-            printf(this->active[i]->show().c_str());
+            this->active.push_back(card->Clone());
         }
 
+        // for (auto i = this->active.size() - 1; i >= 0; i--)
+        // {
+
+        //     printf(this->active[i]->Show().c_str());
+        // }
     }
 
     Hand(const Hand &other)
