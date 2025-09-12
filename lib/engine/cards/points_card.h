@@ -18,7 +18,7 @@ public:
 
     PointsCard *Clone() { return new PointsCard(*this); }
 
-    string Show() override { return cost.show() + " -> " + ft(12, FGC::BrightYellow, BGC::Black).c_str(); }
+    string Show() override { return cost.show() + " -> " + ft(points, FGC::BrightYellow, BGC::Black).c_str(); }
 
     PointsCard(const PointsCard &other)
     {

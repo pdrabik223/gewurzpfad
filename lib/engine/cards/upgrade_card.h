@@ -10,6 +10,8 @@ class UpgradeCard : public CardBase
 {
 public:
     unsigned upgrade_level;
+    
+    UpgradeCard() = delete;
     UpgradeCard(unsigned upgrade_level) : upgrade_level(upgrade_level) {}
 
     ~UpgradeCard() override = default;

@@ -27,6 +27,28 @@ public:
             this->spices[i] = spices[i];
         }
     };
+    SpiceArray(const string &spices)
+    {
+        for (char c : spices)
+        {
+            switch (c)
+            {
+            case 'y':
+                this->spices[Spice::Yellow]++;
+                break;
+
+            case 'r':
+                this->spices[Spice::Red]++;
+                break;
+            case 'g':
+                this->spices[Spice::Green]++;
+                break;
+            case 'b':
+                this->spices[Spice::Brown]++;
+                break;
+            }
+        }
+    };
 
     SpiceArray(initializer_list<unsigned> spices) : spices(spices)
     {
@@ -48,7 +70,19 @@ public:
             return this->spices[3];
         }
     }
+    bool operator==(const SpiceArray &other)
+    {
 
+        return this->spices[0] == other.spices[0] &&
+               this->spices[1] == other.spices[1] &&
+               this->spices[2] == other.spices[2] &&
+               this->spices[3] == other.spices[3];
+    }
+    bool operator!=(const SpiceArray &other)
+    {
+
+        return !this->operator==(other);
+    }
 #pragma warning(push)
 #pragma warning(disable : 4715)
     unsigned get(Spice index) const
@@ -93,10 +127,20 @@ public:
 
     string show()
     {
-        return ft(spices[0], FGC::Black, BGC::BrightYellow) + " " +
-               ft(spices[1], FGC::Black, BGC::BrightRed) + " " +
-               ft(spices[2], FGC::Black, BGC::BrightGreen) + " " +
-               ft(spices[3], FGC::Black, BGC::Yellow);
+        string result = "";
+        if (spices[0] != 0)
+            result += ft(spices[0], FGC::Black, BGC::BrightYellow);
+
+        if (spices[1] != 0)
+            result += " " + ft(spices[1], FGC::Black, BGC::BrightRed);
+
+        if (spices[2] != 0)
+            result += " " + ft(spices[2], FGC::Black, BGC::BrightGreen);
+
+        if (spices[3] != 0)
+            result += " " + ft(spices[3], FGC::Black, BGC::Blue);
+
+        return result;
     }
 };
 #endif
