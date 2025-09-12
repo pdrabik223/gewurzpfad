@@ -33,7 +33,7 @@ public:
 
     string Show() override
     {
-        return ft(upgrade_level, FGC::Black, BGC::BrightWhite) + " -> " + ft(upgrade_level, FGC::Black, BGC::BrightWhite);
+        return ft(upgrade_level, FGC::Black, BGC::BrightWhite) + " -+ " + ft(upgrade_level, FGC::Black, BGC::BrightWhite);
     }
 
     CardType GetCardType() const override { return type_; }

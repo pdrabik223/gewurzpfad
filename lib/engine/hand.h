@@ -48,14 +48,38 @@ public:
         {
             this->active.push_back(card->Clone());
         }
-
-        // for (auto i = this->active.size() - 1; i >= 0; i--)
-        // {
-
-        //     printf(this->active[i]->Show().c_str());
-        // }
+        // verify weather we need to delete active pointers now.
     }
+    void Show()
+    {
+        printf("Player 1\n");
+        printf("Spices:\t");
+        printf(this->held_spices.show().c_str());
+        printf("\n");
+        printf("Points:\t");
+        printf(ft(12, FGC::BrightYellow, BGC::Black).c_str());
+        printf("\n");
+        printf("Active cards:\n");
+        if (this->active.size() > 0)
+            for (auto card : this->active)
+            {
+                printf(card->Show().c_str());
+                printf("\t");
+            }
+        else
+            printf("Empty");
 
+        printf("\n");
+        printf("Resting cards:\n");
+        if (this->resting_cards.size() > 0)
+            for (auto card : this->resting_cards)
+            {
+                printf(card->Show().c_str());
+                printf("\t");
+            }
+        else
+            printf("Empty");
+    }
     Hand(const Hand &other)
     {
         if (this == &other)

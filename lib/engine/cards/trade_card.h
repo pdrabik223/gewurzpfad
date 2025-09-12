@@ -13,7 +13,7 @@ public:
     SpiceArray result;
 
     TradeCard(SpiceArray cost, SpiceArray result) : cost(cost), result(result) {}
-    
+
     ~TradeCard() override = default;
 
     TradeCard(const TradeCard &other)
@@ -37,7 +37,8 @@ public:
     TradeCard *Clone() { return new TradeCard(*this); }
     string Show() override
     {
-        return "Not yet implemented";
+        // return "Not yet implemented";
+        return cost.show() + " -> " + result.show();
     }
     CardType GetCardType() const override { return type_; }
 

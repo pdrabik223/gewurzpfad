@@ -32,8 +32,9 @@ public:
         return *this;
     }
     IncomeCard *Clone() { return new IncomeCard(*this); }
+
+    string Show() override { return "# -> " + income.show(); }
     
-    string Show() override { return "#  -> " + income.show(); }
     CardType GetCardType() const override { return type_; }
 
 private:
