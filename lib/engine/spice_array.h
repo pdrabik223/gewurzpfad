@@ -127,19 +127,21 @@ public:
 
     string show()
     {
-        string result = "";
+        string result = ft(" ", FGC::White, BGC::White);
+
         if (spices[0] != 0)
             result += ft(spices[0], FGC::Black, BGC::BrightYellow);
 
         if (spices[1] != 0)
-            result += " " + ft(spices[1], FGC::Black, BGC::BrightRed);
+            result += ft(spices[1], FGC::Black, BGC::BrightRed);
 
         if (spices[2] != 0)
-            result += " " + ft(spices[2], FGC::Black, BGC::BrightGreen);
+            result += ft(spices[2], FGC::Black, BGC::BrightGreen);
 
         if (spices[3] != 0)
-            result += " " + ft(spices[3], FGC::Black, BGC::Blue);
+            result += ft(spices[3], FGC::Black, BGC::Blue);
 
+        result += ft(" ", FGC::White, BGC::White);
         return result;
     }
 };
