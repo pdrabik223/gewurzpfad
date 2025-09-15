@@ -12,13 +12,20 @@
 // #include "console_tools.h"
 
 using namespace std;
+class OrderedSpiceArray
+{
 
+public:
+    vector<Spice> spices_;
+    OrderedSpiceArray(initializer_list<Spice> spices) : spices_(spices) {}
+    unsigned Count() const noexcept { return spices_.size(); }
+};
 class SpiceArray
 {
 public:
     vector<unsigned> spices = {0, 0, 0, 0};
 
-    SpiceArray() {};
+    SpiceArray() = default;
 
     SpiceArray(unsigned spices[4])
     {
@@ -100,7 +107,32 @@ public:
         }
     }
 #pragma warning(pop)
+    void operator+=(const SpiceArray &other)
+    {
+        this->spices[0] += other.spices[0];
+        this->spices[1] += other.spices[1];
+        this->spices[2] += other.spices[2];
+        this->spices[3] += other.spices[3];
+    }
 
+    void operator-=(const SpiceArray &other)
+    {
+        if (other.spices[0] > this->spices[0])
+            throw exception("Spice array does not contain enough of spices");
+        this->spices[0] -= other.spices[0];
+        
+        if (other.spices[1] > this->spices[1])
+            throw exception("Spice array does not contain enough of spices");
+        this->spices[1] -= other.spices[1];
+        
+        if (other.spices[2] > this->spices[2])
+            throw exception("Spice array does not contain enough of spices");
+        this->spices[2] -= other.spices[2];
+
+        if (other.spices[3] > this->spices[3])
+            throw exception("Spice array does not contain enough of spices");
+        this->spices[3] -= other.spices[3];
+    }
     SpiceArray(const SpiceArray &other)
     {
         if (this == &other)
@@ -125,6 +157,10 @@ public:
         return *this;
     }
 
+    unsigned Count() const
+    {
+        return spices[0] + spices[1] + spices[2] + spices[3];
+    }
     string show()
     {
         string result = ft(" ", FGC::White, BGC::White);

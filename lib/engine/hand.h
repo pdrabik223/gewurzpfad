@@ -57,7 +57,7 @@ public:
         printf(this->held_spices.show().c_str());
         printf("\n");
         printf("Points:\t");
-        printf(ft(12, FGC::BrightYellow, BGC::Black).c_str());
+        printf(ft(this->held_coins, FGC::BrightYellow, BGC::Black).c_str());
         printf("\n");
         printf("Active cards:\n");
         if (this->active.size() > 0)
