@@ -128,8 +128,10 @@ public:
         {
             this->points_cards.push_back(PointsCard(SpiceArray(point_cards_data[i]), stoi(point_cards_data[i + 1])));
         }
+        // singular upgrade 3 card
+        trading_cards.push_back(&UpgradeCard(3));
         // TODO randomize order of both points and trading cards
-
+        
         // lay out cards
         for (unsigned i = 0; i < table_length_; i++)
         {

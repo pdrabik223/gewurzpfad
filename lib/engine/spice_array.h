@@ -20,12 +20,34 @@ public:
     OrderedSpiceArray(initializer_list<Spice> spices) : spices_(spices) {}
     unsigned Count() const noexcept { return spices_.size(); }
 };
+
+// const SpiceArray operator-(const SpiceArray &first, const SpiceArray &other)
+// {
+//     if (other.spices[0] > first.spices[0])
+//         throw exception("Spice array does not contain enough of spices");
+//     auto yellow = first.spices[0] - other.spices[0];
+
+//     if (other.spices[1] > first.spices[1])
+//         throw exception("Spice array does not contain enough of spices");
+//     auto red = first.spices[1] - other.spices[1];
+
+//     if (other.spices[2] > first.spices[2])
+//         throw exception("Spice array does not contain enough of spices");
+//     auto green = first.spices[2] - other.spices[2];
+
+//     if (other.spices[3] > first.spices[3])
+//         throw exception("Spice array does not contain enough of spices");
+//     auto brown = first.spices[3] - other.spices[3];
+
+//     return SpiceArray({yellow, red, green, brown});
+// }
+
 class SpiceArray
 {
 public:
     vector<unsigned> spices = {0, 0, 0, 0};
 
-    SpiceArray() = default;
+    SpiceArray() {};
 
     SpiceArray(unsigned spices[4])
     {
@@ -62,7 +84,8 @@ public:
         if (this->spices.size() != 4)
             throw exception("Incorrect vector size");
     };
-
+#pragma warning(push)
+#pragma warning(disable : 4715)
     unsigned &operator[](Spice index)
     {
         switch (index)
@@ -77,7 +100,9 @@ public:
             return this->spices[3];
         }
     }
-    bool operator==(const SpiceArray &other)
+#pragma warning(pop)
+    const bool operator==(const SpiceArray &other)
+        const
     {
 
         return this->spices[0] == other.spices[0] &&
@@ -85,7 +110,8 @@ public:
                this->spices[2] == other.spices[2] &&
                this->spices[3] == other.spices[3];
     }
-    bool operator!=(const SpiceArray &other)
+    const bool operator!=(const SpiceArray &other)
+        const
     {
 
         return !this->operator==(other);
@@ -120,11 +146,11 @@ public:
         if (other.spices[0] > this->spices[0])
             throw exception("Spice array does not contain enough of spices");
         this->spices[0] -= other.spices[0];
-        
+
         if (other.spices[1] > this->spices[1])
             throw exception("Spice array does not contain enough of spices");
         this->spices[1] -= other.spices[1];
-        
+
         if (other.spices[2] > this->spices[2])
             throw exception("Spice array does not contain enough of spices");
         this->spices[2] -= other.spices[2];
@@ -143,7 +169,6 @@ public:
         this->spices[2] = other.get(Spice::Green);
         this->spices[3] = other.get(Spice::Brown);
     };
-
     const SpiceArray &operator=(const SpiceArray &other)
     {
         if (this == &other)
@@ -155,11 +180,16 @@ public:
         this->spices[3] = other.get(Spice::Brown);
 
         return *this;
-    }
+    };
 
-    unsigned Count() const
+    const unsigned CountSpices() const
     {
         return spices[0] + spices[1] + spices[2] + spices[3];
+    }
+
+    const unsigned Value() const
+    {
+        return spices[0] + spices[1] * 2 + spices[2] * 3 + spices[3] * 4;
     }
     string show()
     {

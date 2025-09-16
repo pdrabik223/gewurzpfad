@@ -37,6 +37,7 @@ public:
     
     CardType GetCardType() const override { return type_; }
 
+
 private:
     const CardType type_ = CardType::INCOME_CARD;
 };

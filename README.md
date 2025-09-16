@@ -38,3 +38,8 @@ To compile this project using CMake:
 ## Upgrade cards
 
 Every player get's upgrade 2 at the beginning of the agame, and there's also singular upgrade 3 card
+
+## Goal 
+Create bare-bones engine for finding best solution in given position. 
+
+In another project leverage this engine to create fully functional game UI with AI agents as oponents.
